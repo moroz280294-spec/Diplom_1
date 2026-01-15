@@ -45,10 +45,7 @@
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.7</version>
                 <configuration>
-                    <excludes>
-                        <exclude>com/example/Animal.class</exclude>
-                        <exclude>com/example/Predator.class</exclude>
-                    </excludes>
+
                 </configuration>
                 <executions>
                     <execution>

@@ -7,7 +7,7 @@ import org.junit.runners.Parameterized;
 import java.util.Arrays;
 import java.util.Collection;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -20,7 +20,7 @@ public class BurgerParameterizedTest {
         this.ingredientType = ingredientType;
     }
 
-    @Parameterized.Parameters(name = "Тип ингредиента: {0}")
+    @Parameterized.Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
                 {IngredientType.SAUCE},
@@ -49,8 +49,9 @@ public class BurgerParameterizedTest {
     }
 
     @Test
-    public void testReceiptContainsBunName() {
+    public void testGetReceipt() {
         Burger burger = new Burger();
+
         Bun mockBun = mock(Bun.class);
         Ingredient mockIngredient = mock(Ingredient.class);
 
@@ -63,89 +64,17 @@ public class BurgerParameterizedTest {
         burger.setBuns(mockBun);
         burger.addIngredient(mockIngredient);
 
-        String receipt = burger.getReceipt();
+        String actualReceipt = burger.getReceipt();
+        String ls = System.lineSeparator();
 
-        assertNotNull(receipt);
-        assertTrue(receipt.contains("black bun"));
-    }
+        String expectedReceipt =
+                "(==== black bun ====)" + ls +
+                        "= " + ingredientType.toString().toLowerCase() + " hot sauce =" + ls +
+                        "(==== black bun ====)" + ls +
+                        ls +
+                        "Price: 215,000000" + ls;
 
-    @Test
-    public void testReceiptContainsIngredientName() {
-        Burger burger = new Burger();
-        Bun mockBun = mock(Bun.class);
-        Ingredient mockIngredient = mock(Ingredient.class);
 
-        when(mockBun.getName()).thenReturn("black bun");
-        when(mockBun.getPrice()).thenReturn(100.0f);
-        when(mockIngredient.getType()).thenReturn(ingredientType);
-        when(mockIngredient.getName()).thenReturn("hot sauce");
-        when(mockIngredient.getPrice()).thenReturn(15.0f);
-
-        burger.setBuns(mockBun);
-        burger.addIngredient(mockIngredient);
-
-        String receipt = burger.getReceipt();
-
-        assertTrue(receipt.contains("hot sauce"));
-    }
-
-    @Test
-    public void testReceiptContainsIngredientType() {
-        Burger burger = new Burger();
-        Bun mockBun = mock(Bun.class);
-        Ingredient mockIngredient = mock(Ingredient.class);
-
-        when(mockBun.getName()).thenReturn("black bun");
-        when(mockBun.getPrice()).thenReturn(100.0f);
-        when(mockIngredient.getType()).thenReturn(ingredientType);
-        when(mockIngredient.getName()).thenReturn("hot sauce");
-        when(mockIngredient.getPrice()).thenReturn(15.0f);
-
-        burger.setBuns(mockBun);
-        burger.addIngredient(mockIngredient);
-
-        String receipt = burger.getReceipt();
-
-        assertTrue(receipt.contains(ingredientType.toString().toLowerCase()));
-    }
-
-    @Test
-    public void testReceiptContainsPriceLabel() {
-        Burger burger = new Burger();
-        Bun mockBun = mock(Bun.class);
-        Ingredient mockIngredient = mock(Ingredient.class);
-
-        when(mockBun.getName()).thenReturn("black bun");
-        when(mockBun.getPrice()).thenReturn(100.0f);
-        when(mockIngredient.getType()).thenReturn(ingredientType);
-        when(mockIngredient.getName()).thenReturn("hot sauce");
-        when(mockIngredient.getPrice()).thenReturn(15.0f);
-
-        burger.setBuns(mockBun);
-        burger.addIngredient(mockIngredient);
-
-        String receipt = burger.getReceipt();
-
-        assertTrue(receipt.contains("Price:"));
-    }
-
-    @Test
-    public void testReceiptContainsTotalPriceValue() {
-        Burger burger = new Burger();
-        Bun mockBun = mock(Bun.class);
-        Ingredient mockIngredient = mock(Ingredient.class);
-
-        when(mockBun.getName()).thenReturn("black bun");
-        when(mockBun.getPrice()).thenReturn(100.0f);
-        when(mockIngredient.getType()).thenReturn(ingredientType);
-        when(mockIngredient.getName()).thenReturn("hot sauce");
-        when(mockIngredient.getPrice()).thenReturn(15.0f);
-
-        burger.setBuns(mockBun);
-        burger.addIngredient(mockIngredient);
-
-        assertTrue(burger.getReceipt().contains("215"));
+        assertEquals(expectedReceipt, actualReceipt);
     }
 }
-
-
